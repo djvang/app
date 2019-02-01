@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getPosts } from '../api'
+import { getData } from '../api'
 import { Navigation } from '../components'
 import { Posts } from '../modules/post'
 
@@ -15,9 +15,9 @@ export default class extends React.Component {
       order: 'asc', 
       pagination: {
         limit: 6,
-        page: 1,
-        total: 100
-      }
+        page: 1
+      },
+      total: 0
     } 
     
     this.onClickPagination = this.onClickPagination.bind(this);
@@ -27,84 +27,84 @@ export default class extends React.Component {
   }
   
   componentDidMount() {
-    getPosts({
-        limit: this.state.pagination.limit,
-        page: this.state.pagination.page,
-        sort: this.state.sort,
-        order: this.state.order
+
+    getData('/posts', {
+        params: {
+            _limit: this.state.pagination.limit,
+            _page: this.state.pagination.page,
+            _sort: this.state.sort,
+            _order: this.state.order
+        }
     })
-    .then(posts => {
+    .then(data => {
         this.setState({
-            posts: posts
+            posts: data.json,
+            total: data.headers.total
         })
     })
+
   }
   
   onClickLimit(event) {
       
     let value = event.target.value;
 
-
-    getPosts({
-        limit: value,
-        page: 1
+    getData('/posts', {
+        params: {
+            _limit: value,
+            _page: this.state.pagination.page,
+            _sort: this.state.sort,
+            _order: this.state.order
+        }
     })
-    .then(posts => {
+    .then(data => {
         this.setState({
-            pagination: {
-                limit: value,
-                page: 1,
-                total: this.state.total
-            },
-            posts: posts
+            posts: data.json,
+            pagination: {...this.state.pagination, ...{ limit: value }}
         })
     })
+
   }
 
   onClickOrder(event) {
       
     let value = event.target.value;
 
-    console.log(value);
-
-    getPosts({
-        sort: this.state.sort,
-        order: value,
-        limit: this.state.pagination.limit,
-        page: 1
+    getData('/posts', {
+        params: {
+            _limit: this.state.pagination.limit,
+            _page: this.state.pagination.page,
+            _sort: this.state.sort,
+            _order: value
+        }
     })
-    .then(posts => {
+    .then(data => {
         this.setState({
-            sort: this.state.sort,
-            order: value,
-            pagination: {
-                limit: this.state.pagination.limit,
-                page: 1,
-                total: this.state.total
-            },
-            posts: posts
+            posts: data.json,
+            order: value
         })
     })
+
   }
   
   onClickPagination(current) {
 
-    getPosts({
-        limit: this.state.pagination.limit,
-        sort: this.state.sort,
-        order: this.state.order,
-        page: current
+    getData('/posts', {
+        params: {
+            _limit: this.state.pagination.limit,
+            _page: current,
+            _sort: this.state.sort,
+            _order: this.state.order
+        }
     })
-    .then(posts => {
+    .then(data => {
         this.setState({
-            pagination: {
-                limit: this.state.pagination.limit,
-                page: current,
-                total: this.state.total
-            },
-            posts: posts
+            posts: data.json,
+            pagination: {...this.state.pagination, ...{ page: current }}
         })
     })
+
+    
   }
   
   render() {    
@@ -115,7 +115,8 @@ export default class extends React.Component {
             onClickLimit={this.onClickLimit} 
             onClickOrder={this.onClickOrder} 
             onClickPagination={this.onClickPagination} 
-            pagination={this.state.pagination} 
+            pagination={this.state.pagination}
+            total={this.state.total}
             order={this.state.order} 
             posts={this.state.posts}
         /> : 'Loading'}

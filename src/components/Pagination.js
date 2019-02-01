@@ -12,10 +12,20 @@ export class Pagination extends React.Component {
 
     }
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.pagination.total !== this.props.pagination.total) {
+            this.setState({
+                pages: Math.ceil(this.props.pagination.total / this.props.pagination.limit)
+            })
+        }
+    }
+
     handlerState(current) {
 
-        this.setState({current: current}, () => {
-            (this.props.onClickPagination ? this.props.onClickPagination : () => {  console.log('The link was clicked.', current); })(current)
+        this.setState({
+            current: current
+        }, () => {
+            this.props.onClickPagination(current)
         })
     }
 
@@ -103,6 +113,10 @@ export class Pagination extends React.Component {
 
 
   }
+
+  Pagination.defaultProps = {
+    onClickPagination: () => {}
+};
 
 // export function Pagination(props) {
   

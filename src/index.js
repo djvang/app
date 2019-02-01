@@ -12,6 +12,12 @@ import PhotosPage from './pages/Photos'
 import TodosPage from './pages/Todos'
 import AlbumsPage from './pages/Albums'
 
+import UIkit from 'uikit';
+import Icons from 'uikit/dist/js/uikit-icons';
+
+// loads the Icon plugin
+UIkit.use(Icons);
+
 class App extends React.Component {
   render() {
     return (

@@ -1,7 +1,31 @@
 import React from 'react'
+import { getData } from '../api'
 import { Navigation } from '../components'
 
 export default class extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            photos: [],
+            pagination: {
+                limit: 6,
+                page: 1
+            }
+        }
+    }
+
+    componentDidMount() {
+        getData('/photos', {
+            params: {
+                _limit: this.state.pagination.limit,
+                _page: this.state.pagination.page
+            }
+        }).then(data => {
+            console.log(data);
+        })
+    }
+
     render() {
         return <div>
             <Navigation></Navigation>

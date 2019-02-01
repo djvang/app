@@ -25,81 +25,30 @@ export function getUser(params) {
 const API = 'https://jsonplaceholder.typicode.com'
 
 export function getData(path, options) {
-    
-    // path, params, embed, expand
-    
-    let url = `${API}${path}`;
+    let url = `${API + path}`;
     let params = "";
-    
-    if(options && options.hasOwnProperty('params'))
-    for (let key in options.params) {
-        if (params !== "") {
-            params += "&";
+
+    if(options && options.hasOwnProperty('params')){
+        for (let key in options.params) {
+            if (params !== "") {
+                params += "&";
+            }
+            params += key + "=" + options.params[key];
+
         }
-        params += key + "=" + options.params[key];
+        url += `${params ? '?' + params : ''}`;
     }
-    
-    url += `${params ? '?' + params : ''}`;
-    
-    
+
     return fetch(url)
-    .then(response => response.json())
-    .then(json => {
-        return {
-            data: json
-        }
-    })
-    .then(response => {
-        if(options && path && options.hasOwnProperty('_embed')) {
-            return fetch(API + '/' + options._embed)
-            .then(response => response.json())
-            .then(json => {
-                response.data[options._embed] = json
-                return response
+        .then(response => {
+            return response.json().then(json =>{
+                return {
+                    json: json,
+                    headers: {
+                        total: response.headers.get('x-total-count') ? +response.headers.get('x-total-count') : json.length
+                    }
+                }
             })
-        } else {
-            return response
-        }
-    })
-    .then(response => {
-        if(options && path && options.hasOwnProperty('_expand')) {
-            return fetch(API + '/' + options._expand)
-            .then(response => response.json())
-            .then(json => {
-                response.data[options._expand] = json
-                return response
-            })
-        } else {
-            return response
-        }
-    })
-    
-    
-    
-    // getPost({ id: this.state.id })
-    // .then(post => {
-    //     this.setState({
-    //         post: post
-    //     })
-        
-    //     return post
-    // })
-    // .then(post => {
-    //     getComments({ postId: post.id })
-    //     .then(comments => {
-    //         this.setState({
-    //             comments: comments
-    //         })
-    //     })
-        
-    //     return post
-    // })
-    // .then(post => {
-    //     getUser({ id: post.userId })
-    //     .then(user => {
-    //         this.setState({
-    //             user: user
-    //         })
-    //     })
-    // })
+        } )
+        .then(json => json);
 }

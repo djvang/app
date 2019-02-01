@@ -24,8 +24,11 @@ export function Posts(props) {
             </div>
             <Pagination 
                 onClickPagination={props.onClickPagination} 
-                pages={100} 
-                pagination={props.pagination}
+                pagination={{
+                    limit: props.pagination.limit,
+                    page: props.pagination.page,
+                    total: props.total
+                }}
             />
         </div>
       </div>
