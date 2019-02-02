@@ -10,13 +10,18 @@ export default class extends React.Component {
         this.state = {
             albums: [],
             pagination: {
-                limit: 4,
+                limit: 6,
                 page: 1
             },
-            total: 0
+            total: 0,
+            userId: '',
+            users: [],
+            q: ''
         }
 
+        this.handlerSearch = this.handlerSearch.bind(this)
         this.handleAlbums = this.handleAlbums.bind(this)
+        this.handleUser = this.handleUser.bind(this)
 
     }
 
@@ -24,17 +29,18 @@ export default class extends React.Component {
         getData('/albums', {
             params: {
                 _limit: this.state.pagination.limit,
-                _page: current
+                _page: current,
+                userId: this.state.userId
             }
         })
         .then(data => {
             this.setState({
                 albums: data.json,
+                total: data.headers.total,
                 pagination: {...this.state.pagination, ...{ page: current }}
             })
         })
     }
-
 
     handlePhotos(e, albumId) {
         e.preventDefault();
@@ -48,11 +54,7 @@ export default class extends React.Component {
             const photos = data.json
 
             UIkit.lightboxPanel({
-                // items: [
-                //     {source: 'https://getuikit.com/assets/uikit/tests/images/size1.jpg', caption: 'Caption 1'},
-                //     {source: 'https://getuikit.com/assets/uikit/tests/images/size2.jpg', caption: 'Caption 2'},
-                // ]
-    
+
                 items: photos.map((photo, index) => {
                     return {
                         source: `${photo.url}.jpg`,
@@ -67,14 +69,57 @@ export default class extends React.Component {
         
     } 
 
+    handleUser(e) {
+        let userId = e.target.value;
+
+        getData('/albums', {
+            params: {
+                _limit: this.state.pagination.limit,
+                _page: 1,
+                userId: userId,
+                q: this.state.q
+            }
+        })
+        .then(data => {
+            this.setState({
+                albums: data.json,
+                total: data.headers.total,
+                pagination: {...this.state.pagination, ...{ page: 1 }},
+                userId: userId
+            })
+        })
+
+    }
+
+    handlerSearch(e) {
+        let q = e.target.value;
+
+        getData('/albums', {
+            params: {
+                _limit: this.state.pagination.limit,
+                _page: 1,
+                userId: this.state.userId,
+                q: q
+            }
+        })
+        .then(data => {
+            this.setState({
+                albums: data.json,
+                total: data.headers.total,
+                pagination: {...this.state.pagination, ...{ page: 1 }},
+                q: q
+            })
+        })
+    }
 
     componentDidMount() {
-
         
         getData('/albums', {
             params: {
                 _limit: this.state.pagination.limit,
-                _page: this.state.pagination.page
+                _page: this.state.pagination.page,
+                userId: this.state.userId,
+                q: this.state.q
             }
         })
         .then(data => {
@@ -84,21 +129,15 @@ export default class extends React.Component {
             })
         })
 
-
-        // let util = UIkit.util;
-
-        // util.on('.js-lightbox', 'click', function (e) {
-        //     e.preventDefault();
-
-        //     UIkit.lightboxPanel({
-        //         items: [
-        //             {source: 'https://getuikit.com/assets/uikit/tests/images/size1.jpg', caption: 'Caption 1'},
-        //             {source: 'https://getuikit.com/assets/uikit/tests/images/size2.jpg', caption: 'Caption 2'},
-        //         ]
-        //     }).show();
-        // });
+        getData('/users')
+        .then(data => {
+            this.setState({
+                users: data.json
+            })
+        })
     }
-    render() {
+
+    render() {              
         return <div>
             <Navigation></Navigation>
             <main className="uk-main">
@@ -109,14 +148,16 @@ export default class extends React.Component {
                             <input
                                 className="uk-input"
                                 type="search"
+                                value={this.state.q}
+                                onChange={this.handlerSearch}
                                 placeholder="Search..."
                             />
                             </form>
-                            <select className="uk-select uk-width-small uk-margin-left">
-                            <option value="all">All</option>
-                            <option value={1}>User 1</option>
-                            <option value={2}>User 2</option>
-                            <option value={3}>User 3</option>
+                            <select className="uk-select uk-width-small uk-margin-left" value={this.state.userId} onChange={this.handleUser} disabled={this.state.users.length > 0 ? false : true}>
+                            <option value="">All</option>
+                            {this.state.users.map(user => {
+                                return <option key={user.id} value={user.id}>{user.name}</option>
+                            })}
                             </select>
                             {/* <div class="uk-button-group uk-margin-left">
                                         <button class="uk-button uk-button-default uk-active">
@@ -127,7 +168,7 @@ export default class extends React.Component {
                                         </button>
                                     </div> */}
                         </div>
-                        <table className="uk-table uk-table-justify uk-table-divider">
+                        {this.state.albums.length > 0 ? <table className="uk-table uk-table-justify uk-table-divider">
                             <tbody>
                                 {this.state.albums.map(album => {
                                     return (
@@ -150,7 +191,8 @@ export default class extends React.Component {
                                     )
                                 })}
                             </tbody>
-                        </table>
+                            {/* TODO как быть здесь при загрузке? */}
+                        </table> : <div className="uk-h2">Not Fount: {this.state.q}</div>}
                         <Pagination
                             pagination={{ 
                                 page: this.state.pagination.page, 

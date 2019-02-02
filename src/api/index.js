@@ -30,10 +30,12 @@ export function getData(path, options) {
 
     if(options && options.hasOwnProperty('params')){
         for (let key in options.params) {
-            if (params !== "") {
-                params += "&";
+            if(options.params[key]) {
+                if (params !== "") {
+                    params += "&";
+                }
+                params += key + "=" + options.params[key];
             }
-            params += key + "=" + options.params[key];
 
         }
         url += `${params ? '?' + params : ''}`;

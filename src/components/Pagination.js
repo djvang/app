@@ -52,6 +52,10 @@ export class Pagination extends React.Component {
     
     render() {
 
+
+        if(!this.props.pagination.total) return null
+        if(!(this.props.pagination.limit < this.props.pagination.total)) return null
+
         let items = [];
 
         for (let i = 0; i < this.state.pages; i++) {
