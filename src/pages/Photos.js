@@ -32,10 +32,7 @@ export default class extends React.Component {
                 preFetch: data.json.slice(this.state.pagination.limit),
                 total: data.headers.total
             })
-
-        })
-
-        
+        })   
     }
 
     handleLoadMore(e) {
@@ -53,14 +50,13 @@ export default class extends React.Component {
             this.setState({
                 photos: [...this.state.photos, ...this.state.preFetch],
                 preFetch: data.json,
-                total: data.headers.total,
                 pagination: {...this.state.pagination, page: page}
             })
         })
-
     }
 
     render() {
+
         return <div>
             <Navigation></Navigation>
             <main className="uk-main">
@@ -75,19 +71,11 @@ export default class extends React.Component {
                         />
                         </form>
                         <select className="uk-select uk-width-small uk-margin-left">
-                        <option value="all">All</option>
-                        <option value={1}>Album 1</option>
-                        <option value={2}>Album 2</option>
-                        <option value={3}>Album 3</option>
+                            <option value="all">All</option>
+                            <option value={1}>Album 1</option>
+                            <option value={2}>Album 2</option>
+                            <option value={3}>Album 3</option>
                         </select>
-                        {/* <div class="uk-button-group uk-margin-left">
-                                <button class="uk-button uk-button-default uk-active">
-                                    <span uk-icon="icon:  thumbnails"></span>
-                                </button>
-                                <button class="uk-button uk-button-default">
-                                    <span uk-icon="icon:  image"></span>
-                                </button>
-                            </div> */}
                     </div>
                     <div
                         className="uk-grid uk-child-width-1-2@s uk-child-width-1-2@m"
@@ -109,7 +97,7 @@ export default class extends React.Component {
                     </ul>
                     </div>
                 </div>
-                </main>
+            </main>
         </div>
     }
 }

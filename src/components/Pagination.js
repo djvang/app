@@ -18,6 +18,12 @@ export class Pagination extends React.Component {
                 pages: Math.ceil(this.props.pagination.total / this.props.pagination.limit)
             })
         }
+
+       if(prevProps.pagination.page !== this.props.pagination.page) {
+            this.setState({
+                current: this.props.pagination.page
+            })
+        }
     }
 
     handlerState(current) {
@@ -91,7 +97,7 @@ export class Pagination extends React.Component {
                 </span>
                 </a>
             </li>
-            {items}
+            {this.props.isCurrent ? <li><span>{this.state.current}</span></li> : items}
             <li>
                 <a href={`/posts/page/${this.state.current + 1}`} onClick={(e) => this.handleClickNext(this.state.current, e)}>
                     <span data-uk-pagination-next>
@@ -119,7 +125,8 @@ export class Pagination extends React.Component {
   }
 
   Pagination.defaultProps = {
-    onClickPagination: () => {}
+    onClickPagination: () => {},
+    isCurrent: false
 };
 
 // export function Pagination(props) {

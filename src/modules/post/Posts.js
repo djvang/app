@@ -18,6 +18,14 @@ export function Posts(props) {
                     <option value="12">12</option>
                     <option value="24">24</option>
                 </select>
+                <div className="uk-button-group uk-margin-left">
+                    <button className="uk-button uk-button-default uk-active">
+                        <span uk-icon="icon:  thumbnails"></span>
+                    </button>
+                    <button className="uk-button uk-button-default">
+                        <span uk-icon="icon:  image"></span>
+                    </button>
+                </div>
             </form>
             <div className="uk-grid uk-child-width-1-2@s uk-child-width-1-3@m">
               {props.posts.map((post, index) => <div key={post.id}><Post data={post}/></div>)}
