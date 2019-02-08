@@ -17,12 +17,14 @@ export default class extends React.Component {
         limit: 6,
         page: 1
       },
+      view: 'grid', // or list
       total: 0
     } 
     
     this.onClickPagination = this.onClickPagination.bind(this);
     this.onClickLimit = this.onClickLimit.bind(this);
     this.onClickOrder = this.onClickOrder.bind(this);
+    this.onClickView = this.onClickView.bind(this);
     
   }
   
@@ -106,6 +108,14 @@ export default class extends React.Component {
 
     
   }
+
+  onClickView(e, value) {
+    e.preventDefault();
+
+    this.setState({
+      view: value
+    })
+  }
   
   render() {    
     return <div>
@@ -115,10 +125,12 @@ export default class extends React.Component {
             onClickLimit={this.onClickLimit} 
             onClickOrder={this.onClickOrder} 
             onClickPagination={this.onClickPagination} 
+            onClickView={this.onClickView} 
             pagination={this.state.pagination}
             total={this.state.total}
             order={this.state.order} 
             posts={this.state.posts}
+            view={this.state.view}
         /> : 'Loading'}
     </div>
   }

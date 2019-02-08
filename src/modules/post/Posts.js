@@ -19,16 +19,20 @@ export function Posts(props) {
                     <option value="24">24</option>
                 </select>
                 <div className="uk-button-group uk-margin-left">
-                    <button className="uk-button uk-button-default uk-active">
+                    <button 
+                    className={`uk-button uk-button-default ${props.view === 'grid' ? 'uk-active' : ''}`} 
+                    onClick={(e) => props.onClickView(e, 'grid')}>
                         <span uk-icon="icon:  thumbnails"></span>
                     </button>
-                    <button className="uk-button uk-button-default">
+                    <button 
+                    className={`uk-button uk-button-default ${props.view === 'list' ? 'uk-active' : ''}`}
+                    onClick={(e) => props.onClickView(e, 'list')}>
                         <span uk-icon="icon:  image"></span>
                     </button>
                 </div>
             </form>
-            <div className="uk-grid uk-child-width-1-2@s uk-child-width-1-3@m">
-              {props.posts.map((post, index) => <div key={post.id}><Post data={post}/></div>)}
+            <div className={`uk-grid ${props.view === 'grid' ? 'uk-child-width-1-2@s uk-child-width-1-3@m' : 'uk-grid uk-child-width-1-2@s uk-child-width-1-2@m'}`}>
+              {props.posts.map((post, index) => <div key={post.id}><Post view={props.view} data={post}/></div>)}
             </div>
             <Pagination 
                 onClickPagination={props.onClickPagination} 
@@ -42,4 +46,5 @@ export function Posts(props) {
       </div>
   </main>
 }
+
 

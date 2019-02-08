@@ -15,28 +15,19 @@ export default class extends React.Component {
     }
     
     componentDidMount() {
-        
-        // getData('/posts/1', {
-        //     params: {
-        //         _limit: 10,
-        //         _page: 2
-        //     },
-        //     _expand: 'users'
-        // }).then(response => {
-        //     console.log('dsd',response)
-        // }) 
 
         let id = this.props.match.params.id;
         
         getPost({ id })
         .then(post => {
             this.setState({
-                post: post
+                post: post[0]
             })
-            
-            return post
+
+            return post[0]
         })
         .then(post => {
+            
             getComments({ postId: post.id })
             .then(comments => {
                 this.setState({
@@ -54,26 +45,23 @@ export default class extends React.Component {
                 })
             })
             
-           
         })
     }
     
     render() {
-        console.log(this.props);
         
         return <div>
         <Navigation/>
         <main className="uk-main">
             <div className="uk-section">
                 <div className="uk-container">
-                    <Breadcrumb/>
+                    <Breadcrumb url={this.props.match.url}/>
                     {this.state.post && <Content post={this.state.post} />}
                     {this.state.comments.length > 0 && <Comments comments={this.state.comments}/>}
                     <AddComment/>
                 </div>
             </div>
-            </main>
-
+        </main>
     </div>
     }
 }

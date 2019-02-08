@@ -1,3 +1,5 @@
+const API = 'https://jsonplaceholder.typicode.com'
+
 export function getPosts(params) {
     return fetch(`https://jsonplaceholder.typicode.com/posts?_limit=${params.limit}&_page=${params.page}&_sort=${params.sort}&_order=${params.order}`)
     .then(response => response.json())
@@ -5,7 +7,7 @@ export function getPosts(params) {
 }
 
 export function getPost(params) {
-    return fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}`)
+    return fetch(`https://jsonplaceholder.typicode.com/posts/?title=${params.id.split('-').join(' ')}`)
     .then(response => response.json())
     .then(json => json)
 }
@@ -22,7 +24,6 @@ export function getUser(params) {
     .then(json => json)
 }
 
-const API = 'https://jsonplaceholder.typicode.com'
 
 export function getData(path, options) {
     let url = `${API + path}`;
