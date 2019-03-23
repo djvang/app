@@ -15,25 +15,31 @@ import AlbumsPage from './pages/Albums'
 import UIkit from 'uikit';
 import Icons from 'uikit/dist/js/uikit-icons';
 
+import store from './store';
+import { Provider } from 'react-redux';
+
 // loads the Icon plugin
 UIkit.use(Icons);
-
+ 
 class App extends React.Component {
   render() {
     return (
-      <Router>
-        <div>
-          <Route exact path="/" component={HomePage} />
-          
-          <Route exact path="/posts" component={PostsPage} />
-          <Route exact path="/posts/:id" component={PostPage} />
+      <Provider store={store}>
+        <Router>
+          <div>
+            <Route exact path="/" component={HomePage} />
+            
+            <Route exact path="/posts" component={PostsPage} />
+            <Route exact path="/posts/:id" component={PostPage} />
 
-          <Route exact path="/users" component={UsersPage} />
-          <Route exact path="/photos" component={PhotosPage} />
-          <Route exact path="/todos" component={TodosPage} />
-          <Route exact path="/albums" component={AlbumsPage} />
-        </div>
-      </Router>
+            <Route exact path="/users" component={UsersPage} />
+            <Route exact path="/photos" component={PhotosPage} />
+            <Route exact path="/todos" component={TodosPage} />
+            <Route exact path="/albums" component={AlbumsPage} />
+          </div>
+        </Router>
+      </Provider>
+      
     )
   }
 }

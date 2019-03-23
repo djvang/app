@@ -1,14 +1,20 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { Navigation, Pagination } from '../components'
 import UIkit from 'uikit'
 import { getData } from '../api'
 
-export default class extends React.Component {
+import { getAlbums } from '../actions'
+
+
+// console.log(store.getState());
+
+class Albums extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            albums: [],
+            // albums: [],
             pagination: {
                 limit: 6,
                 page: 1
@@ -39,6 +45,7 @@ export default class extends React.Component {
                 total: data.headers.total,
                 pagination: {...this.state.pagination, ...{ page: current }}
             })
+    
         })
     }
 
@@ -123,21 +130,39 @@ export default class extends React.Component {
             }
         })
         .then(data => {
-            this.setState({
-                albums: data.json,
-                total: data.headers.total
-            })
+            // this.setState({
+            //     albums: data.json,
+            //     total: data.headers.total
+            // })
+
+            this.props.dispatch(getAlbums(data.json));
+            // console.log(store.getState());
         })
 
         getData('/users')
         .then(data => {
-            this.setState({
-                users: data.json
-            })
+            // this.setState({
+            //     users: data.json
+            // })
         })
+
+
+        // this.unsubscribe = store.subscribe(() => this.forceUpdate());
     }
 
-    render() {              
+
+    // componentWillUnmount() {
+    //     if(this.unsubscribe) this.unsubscribe()
+    // }
+
+    render() {  
+        
+        const state = this.state;
+
+
+
+        console.log(this.props)
+        
         return <div>
             <Navigation></Navigation>
             <main className="uk-main">
@@ -168,9 +193,9 @@ export default class extends React.Component {
                                         </button>
                                     </div> */}
                         </div>
-                        {this.state.albums.length > 0 ? <table className="uk-table uk-table-justify uk-table-divider">
+                        {this.props.albums.length > 0 ? <table className="uk-table uk-table-justify uk-table-divider">
                             <tbody>
-                                {this.state.albums.map(album => {
+                                {this.props.albums.map(album => {
                                     return (
                                         <tr key={album.id}>
                                             <td>
@@ -207,3 +232,12 @@ export default class extends React.Component {
         </div>
     }
 }
+
+
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+      albums: state.albums
+    }
+  }
+
+export default connect(mapStateToProps)(Albums)
