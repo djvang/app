@@ -1,9 +1,14 @@
 export default {
-  albums: [
-    {
-      id: 1,
-      title: "quidem molestiae enim",
-      userId: 1
-    }
-  ]
+  // albums: {
+  //   limit: 6,
+  //   page: 1,
+  //   total: 0,
+  //   data: [
+  //     {
+  //       id: 1,
+  //       title: "quidem molestiae enim",
+  //       userId: 1
+  //     }
+  //   ]
+  // }
 }

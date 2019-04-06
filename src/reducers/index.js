@@ -2,10 +2,26 @@ import { combineReducers } from 'redux';
 import { GET_ALBUMS, GET_USERS, GET_PHOTOS } from '../actions'
 
 
-const albums = (state = [], action) => {
+const albums = (state = {
+  limit: 6,
+  page: 1,
+  total: 0,
+  data: [],
+  q: '',
+  userId: undefined,
+  isFetching: false
+}, action) => {
   switch(action.type) {
     case GET_ALBUMS: 
-      return action.albums
+      return {
+        ...state,
+        ...action.payload
+      }
+    case GET_ALBUMS + '_REQUEST': 
+      return {
+        ...state,
+        ...action.payload
+      }
 
     default:
      return state
@@ -13,10 +29,15 @@ const albums = (state = [], action) => {
 }
 
 
-const users = (state = [], action) => {
+const users = (state = {
+  data: []
+}, action) => {
   switch(action.type) {
     case GET_USERS: 
-      return action.users
+      return {
+        ...state,
+        ...action.payload
+      }
 
     default:
      return state

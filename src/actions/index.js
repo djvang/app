@@ -2,14 +2,23 @@ export const GET_ALBUMS = 'GET_ALBUMS';
 export const GET_USERS = 'GET_USERS';
 export const GET_PHOTOS = 'GET_PHOTOS';
 
-export const getAlbums = (albums) => ({
+
+export const getAlbums = (body) => ({
   type: GET_ALBUMS,
-  albums: albums
+  request: {
+      method: 'get',
+      url: '/albums',
+      body: body
+  }
 })
 
-export const getUsers = (users) => ({
+export const getUsers = (body) => ({
   type: GET_USERS,
-  users: users
+  request: {
+      method: 'get',
+      url: '/users',
+      body: body
+  }
 })
 
 export const getPhotos = (photos) => ({

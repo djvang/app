@@ -10,7 +10,7 @@ import PostPage from './pages/Post'
 import UsersPage from './pages/Users'
 import PhotosPage from './pages/Photos'
 import TodosPage from './pages/Todos'
-import AlbumsPage from './pages/Albums'
+import AlbumsContainer from './containers/AlbumsContainer'
 
 import UIkit from 'uikit';
 import Icons from 'uikit/dist/js/uikit-icons';
@@ -35,7 +35,7 @@ class App extends React.Component {
             <Route exact path="/users" component={UsersPage} />
             <Route exact path="/photos" component={PhotosPage} />
             <Route exact path="/todos" component={TodosPage} />
-            <Route exact path="/albums" component={AlbumsPage} />
+            <Route exact path="/albums" component={AlbumsContainer} />
           </div>
         </Router>
       </Provider>
